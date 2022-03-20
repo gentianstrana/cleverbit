@@ -1,5 +1,6 @@
 using Cleverbit.CodingTask.Data;
 using Cleverbit.CodingTask.Host.Auth;
+using Cleverbit.CodingTask.Host.Configurations;
 using Cleverbit.CodingTask.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
 using System.IO;
 
 namespace Cleverbit.CodingTask.Host
@@ -36,6 +38,9 @@ namespace Cleverbit.CodingTask.Host
 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
+            services.AddCoreServices();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

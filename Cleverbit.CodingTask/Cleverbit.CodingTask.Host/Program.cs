@@ -31,8 +31,10 @@ namespace Cleverbit.CodingTask.Host
                     var context = services.GetRequiredService<CodingTaskContext>();
                     var hashService = services.GetRequiredService<IHashService>();
                     var task = Task.Run(async () => await context.Initialize(hashService));
-
                     task.Wait();
+
+                    var task2 = Task.Run(async () => await context.PredefineMatches());           
+                    task2.Wait();
                 }
                 catch (Exception ex)
                 {

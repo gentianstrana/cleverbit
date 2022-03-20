@@ -1,5 +1,6 @@
 ﻿using Cleverbit.CodingTask.Utilities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,6 +63,47 @@ namespace Cleverbit.CodingTask.Data
             if (anyNewUser)
             {
                 await context.SaveChangesAsync(); 
+            }
+        }
+
+        public static async Task PredefineMatches(this CodingTaskContext context)
+        {
+            await context.Database.EnsureCreatedAsync();
+
+            var predefinedMatches = await context.Matches.ToListAsync();
+
+            bool anyNewMatch = false;
+
+            if (!predefinedMatches.Any(u => u.MatchName == "Match1"))
+            {
+                context.Matches.Add(new Models.Match
+                {
+                    MatchName = "Match1",
+                    PlayerOneId = 1,
+                    PlayerTwoId = 2,
+                    ExpireTimeStamp = DateTime.Now.AddMinutes(1)
+                });
+
+                anyNewMatch = true;
+            }
+
+            if (!predefinedMatches.Any(u => u.MatchName == "Match2"))
+            {
+                context.Matches.Add(new Models.Match
+                {
+                    MatchName = "Match2",
+                    PlayerOneId = 3,
+                    PlayerTwoId = 4,
+                    ExpireTimeStamp = DateTime.Now.AddMinutes(1)
+                });
+
+                anyNewMatch = true;
+            }
+
+
+            if (anyNewMatch)
+            {
+                await context.SaveChangesAsync();
             }
         }
     }
