@@ -13,6 +13,7 @@ namespace Cleverbit.CodingTask.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MatchesController : ControllerBase
     {
         public MatchesController(IMatchService matchService)
@@ -22,9 +23,8 @@ namespace Cleverbit.CodingTask.Host.Controllers
 
         private IMatchService MatchService { get; }
 
-        // GET api/ping/with-auth
         [HttpGet("played")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPlaydMatches()
         {
             var matches = await MatchService.GetPlayedMatches();
@@ -32,7 +32,6 @@ namespace Cleverbit.CodingTask.Host.Controllers
         }
 
         [HttpPost("{matchId}/play-now")]
-        [Authorize]
         public async Task<IActionResult> PlayNow([Range(1, Int32.MaxValue)] int matchId)
         {
             var match = await MatchService.PlayNow(matchId, Int32.Parse(User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value));
